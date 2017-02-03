@@ -14,9 +14,12 @@ This program demonstrates four cpu scheduling algorithms. Particularly:
 * PR
 * RR
 
+
+<=============Write more for Summary================>
+
 ## Quick Start
 
-What to get scheduling quick? This is the place.
+Want to get scheduling quick? This is the place.
 
 ### Arguments
 
@@ -55,7 +58,9 @@ translate to processes.  There are three types of tasks that can appear:
       `sleep 10`
       
 1. stop
-   1. Interpreted as an 
+   1. An instruction that signals the end of instructions.  Signals to the cpu  
+      scheduler thread to terminate and the main thread to proceed with  
+      termination routine.
 
 ### Output
 
@@ -70,10 +75,6 @@ Waiting time : ....
 Response time : ....
 ```
 
-
 ## Synopsis
 
 *My approach to solving the problem...*
-
-
-
