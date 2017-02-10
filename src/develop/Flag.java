@@ -94,10 +94,10 @@ public class Flag {
 
     public void printFlags(){
         System.out.printf("===================\n" +
-                "Scheduling Algorithm: %s\n", this.algorithm);
+                "scheduling algorithm: %s\n", this.algorithm);
         if( this.algorithm == Algorithm.RR ){
-                System.out.printf("Quantum: %d\n", this.quantum);
+                System.out.printf("quantum: %d\n", this.quantum);
         }
-        System.out.printf("Input File: %s\n", this.inputfile);
+        System.out.printf("input file: %s\n", this.inputfile);
     }
 }
