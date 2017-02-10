@@ -1,12 +1,28 @@
 package develop;
 
+import static java.lang.System.exit;
+
 public class Main {
 
     public static void main(String[] args) {
+
+        Flag gflags = null;
         System.out.println("cpu-scheduling with threads and semaphores");
+
+        System.out.printf("%d: ", args.length);
         for ( int i = 0 ; i < args.length ; i++ ){
             System.out.printf("%s ", args[i]);
         }
+        System.out.println();
+
+        try{
+            gflags = new Flag( args );
+        }catch( Exception e ){
+            System.out.println(e);
+            exit(0);
+        }
+        gflags.printFlags();
+
 
         // Call the file reader thread
         // Wait for file reader thread to terminate
