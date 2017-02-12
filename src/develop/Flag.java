@@ -100,4 +100,10 @@ public class Flag {
         }
         System.out.printf("input file: %s\n", this.inputfile);
     }
+
+    public String getInputFile(){ return this.inputfile; }
+
+    public Integer getQuantum(){ return this.quantum; }
+
+    public Enum<Algorithm> getAlgorithm(){ return this.algorithm; }
 }
