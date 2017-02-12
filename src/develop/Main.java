@@ -8,6 +8,8 @@ public class Main {
         Flag gflags = null;
         System.out.println("cpu-scheduling with threads and semaphores");
 
+        // Create a new Flag object and pass it the arguments for parsing.
+        // Flag object throws various Exceptions for invalid arguments.
         try{
             gflags = new Flag( args );
         }catch( Exception e ){
@@ -16,6 +18,19 @@ public class Main {
         }
         gflags.printFlags();
 
+        // Create Reader Thread
+        ReaderThread readerthread = null;
+        try{
+            readerthread = new ReaderThread( gflags.inputfile );
+            readerthread.start();
+            readerthread.join();
+        }catch ( Exception e ){
+            System.out.println(e);
+        }
+
+        System.out.println("MainThread joineded with ReaderThread");
+
+
 
         // Call the file reader thread
         // Wait for file reader thread to terminate
@@ -23,8 +38,6 @@ public class Main {
         // Output metrics
         return;
     }
-
-    // File Reader Thread
 
     // CPU Scheduling Thread
 
