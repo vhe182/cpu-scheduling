@@ -23,7 +23,10 @@ import static develop.Main.ready_queue;
  * 3 - Reading 'stop' causes ReaderThread to terminate itself.
  */
 public class ReaderThread extends Thread {
+
     BufferedReader bufreader;
+    private static final Object lock = new Object();
+
 
     ReaderThread( String inputfile ) throws Exception {
         try{
@@ -38,6 +41,7 @@ public class ReaderThread extends Thread {
      */
     @Override
     public void run() {
+
         String line;
         String buf[];
         Boolean stop = false;
@@ -46,12 +50,12 @@ public class ReaderThread extends Thread {
             try {
                 line = bufreader.readLine();
                 buf = line.split(" ");
-                if( buf[0].equalsIgnoreCase( "stop") ) {
+                if( buf[0].equalsIgnoreCase( "stop") ||
+                        line == null ) {
                     stop = true;
                     System.out.println("Stop Line:");
                     continue;
                 }
-
                 /*
                     // Debug: print out all elements of buf (args in task)
                     for( int i = 0 ; i < buf.length ; i ++ ){
@@ -100,17 +104,18 @@ public class ReaderThread extends Thread {
                 IntegerArray intarray = separateIntegers( args );
                 Proc proc = new Proc( intarray );
 
-
-                ready_queue.add( proc );
-                System.out.println( ready_queue.toString() );
+                // Accessing ready_queue should be protected
+                synchronized ( lock ) {
+                    ready_queue.add(proc);
+                }
+                //System.out.println( ready_queue.toString() );
                 break;
             case "sleep":
                 System.out.printf("Sleep Line: %s\n", args[1]);
-                sleep( Integer.parseInt( args[1]) );
+                Thread.sleep( Integer.parseInt( args[1]) );
                 break;
             case "stop":
-                System.out.println("Stop Line: (How did you get here?!?!)");
-                break;
+                throw new Exception("Stop Line: (How did you get here?!?!)");
             default:
                 throw new Exception("Error: First argument on line" +
                         "should be 'proc','sleep', or 'stop'");
