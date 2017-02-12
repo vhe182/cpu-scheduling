@@ -1,7 +1,12 @@
 package develop;
 
+import com.sun.org.apache.xalan.internal.xsltc.util.IntegerArray;
+
 import java.io.*;
 import java.nio.Buffer;
+
+import static develop.Main.io_queue;
+import static develop.Main.ready_queue;
 
 /**
  * The ReaderThread attempts to open a file. Upon successful opening of a file
@@ -26,7 +31,6 @@ public class ReaderThread extends Thread {
         }catch( Exception e ){
             throw new Exception("Error: Something went wrong in openFile");
         }
-;
     }
 
     /**
@@ -34,12 +38,33 @@ public class ReaderThread extends Thread {
      */
     @Override
     public void run() {
-        try{
-            sleep(1000);
-            printFile();
-        }catch ( Exception e ){
-            System.out.println("Error: Something went wrong in run() of ReaderThread");
-        }
+        String line;
+        String buf[];
+        Boolean stop = false;
+        // Loop until EOF
+        while( stop != true ) {
+            try {
+                line = bufreader.readLine();
+                buf = line.split(" ");
+                if( buf[0].equalsIgnoreCase( "stop") ) {
+                    stop = true;
+                    System.out.println("Stop Line:");
+                    continue;
+                }
+
+                /*
+                    // Debug: print out all elements of buf (args in task)
+                    for( int i = 0 ; i < buf.length ; i ++ ){
+                        System.out.println( buf[i] );
+                    }
+                */
+                handleTask(buf);
+            } catch (Exception e) {
+                System.out.println("Error: Something went wrong in run() of" +
+                        " ReaderThread");
+                e.printStackTrace();
+            } // end catch
+        } // end while
     }
 
     /**
@@ -60,6 +85,47 @@ public class ReaderThread extends Thread {
         String buffer = "";
         while( ( buffer = bufreader.readLine()) != null ) {
             System.out.println(buffer);
-        }
+        } // end while
+    }
+
+    /**
+     * Handles the 3 different cases. This creates an instance of a Proc
+     * object whenever needed and places it into the statically
+     * instantiated ready_queue.
+     */
+    private void handleTask( String args[] ) throws Exception {
+        switch ( args[0].toLowerCase() ) {
+            case "proc":
+                System.out.println("Proc Line:");
+                IntegerArray intarray = separateIntegers( args );
+                Proc proc = new Proc( intarray );
+
+
+                ready_queue.add( proc );
+                System.out.println( ready_queue.toString() );
+                break;
+            case "sleep":
+                System.out.printf("Sleep Line: %s\n", args[1]);
+                sleep( Integer.parseInt( args[1]) );
+                break;
+            case "stop":
+                System.out.println("Stop Line: (How did you get here?!?!)");
+                break;
+            default:
+                throw new Exception("Error: First argument on line" +
+                        "should be 'proc','sleep', or 'stop'");
+        } // end switch
+    }
+
+    /**
+     * Separate burst integers from the String array and return an
+     * integer array.
+     */
+    private IntegerArray separateIntegers( String args[] ) {
+        IntegerArray intarray = new IntegerArray();
+        for( int i = 1 ; i < args.length ; i++ ){
+            intarray.add( Integer.valueOf( args[i] ) );
+        } // end for-loop
+        return intarray;
     }
 }
