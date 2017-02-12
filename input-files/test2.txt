@@ -1,0 +1,5 @@
+proc 20 10 25
+proc 30 5 20
+sleep 100
+proc 10 15 30
+stop
