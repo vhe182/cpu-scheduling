@@ -11,9 +11,9 @@ public class Flag {
         FIFO, SJF, PR, RR
     }
 
-    public Algorithm algorithm;
-    public Integer quantum;
-    public String inputfile;
+    private Algorithm algorithm;
+    private Integer quantum;
+    private String inputfile;
 
     public Flag(String[] arguments ) throws Exception {
 
